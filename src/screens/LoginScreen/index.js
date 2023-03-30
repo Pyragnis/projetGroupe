@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Bandeau from '../components/banderol';
+import Bandeau from '../../components/banderol';
 
 //AsyncStorage
 
 
 //formulaire de login sans token ni BDD
-const LoginScreen = ({ navigation }) => {
+const Index = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -103,4 +103,4 @@ const LoginScreen = ({ navigation }) => {
     margin-bottom: 10px;
   `;
 
-export default LoginScreen;
+export default Index;

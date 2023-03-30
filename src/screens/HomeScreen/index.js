@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const HomePage = () => {
+const Index = () => {
   const navigation = useNavigation();
   return (
     <View>
@@ -13,4 +13,4 @@ const HomePage = () => {
 
 
 
-export default HomePage;
+export default Index;
