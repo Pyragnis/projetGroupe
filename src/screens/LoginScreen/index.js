@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import axios from './axiosConfig';
+import axios from '../../config/axiosConfig';
 import React, {useState} from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
 import styled from 'styled-components';
@@ -63,7 +63,7 @@ const Login = ({onLogin}) => {
       <Touchable onPress={handleLogin}>
         <StyledText>Se connecter</StyledText>
       </Touchable>
-      {error && <ErrorText>{error}</ErrorText>} {/* afficher le message d'erreur s'il existe */}
+      {/*{error && <ErrorText>{error}</ErrorText>}  afficher le message d'erreur s'il existe */}
     </Container>
   );
 };

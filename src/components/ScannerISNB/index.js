@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
 import styled from 'styled-components/native';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
