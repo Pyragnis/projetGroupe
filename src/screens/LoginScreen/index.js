@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-//import axios from '../../config/axiosConfig';
-import axios from 'axios';
+import axiosInstance from '../../config/axiosInstance';
 import React, {useState} from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
 import styled from 'styled-components';
@@ -19,7 +18,7 @@ const Login = ({onLogin}) => {
   const handleLogin = () => {
     setLoading(true);
     setError(null);
-    axios({
+    axiosInstance({
       method: 'POST',
       url: 'https://login.hikkary.com/users/login',
       data: {
@@ -32,7 +31,6 @@ const Login = ({onLogin}) => {
         AsyncStorage.setItem('token', res.headers['x-access-token'])
           .then(() => {
             onLogin(); // Ajoutez cette ligne pour appeler la fonction onLogin
-
             navigation.navigate('Home');
           })
           .catch(err => {
@@ -42,10 +40,12 @@ const Login = ({onLogin}) => {
       .catch(err => {
         setError(err.message);
         //console.log('🚀 ~ file: login.js:6 ~ Login ~ err', err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-      setLoading(false);
   };
-
+  
   return (
     <Container>
       <Title>Connexion</Title>
@@ -59,6 +59,7 @@ const Login = ({onLogin}) => {
         <TextInputStyled
           placeholder="Password"
           value={inputs.password}
+          secureTextEntry={true}
           onChangeText={text => setInputs({...inputs, password: text})}
         />
       <Touchable onPress={handleLogin}>
