@@ -51,23 +51,23 @@ const Login = ({onLogin}) => {
       <Title>Connexion</Title>
       <Spinner visible={loading} />
       <Bandeau/>
-        <TextInputStyled
-          placeholder="Email"
-          value={inputs.email}
-          onChangeText={text => setInputs({...inputs, email: text})}
-        />
-        <TextInputStyled
-          placeholder="Password"
-          value={inputs.password}
-          secureTextEntry={true}
-          onChangeText={text => setInputs({...inputs, password: text})}
-        />
+      <TextInputStyled
+        placeholder="Email"
+        value={inputs.email}
+        onChangeText={text => setInputs({...inputs, email: text})}
+      />
+      <TextInputStyled
+        placeholder="Password"
+        value={inputs.password}
+        secureTextEntry={true}
+        onChangeText={text => setInputs({...inputs, password: text})}
+      />
       <Touchable onPress={handleLogin}>
         <StyledText>Se connecter</StyledText>
       </Touchable>
-      {/*{error && <ErrorText>{error}</ErrorText>}  afficher le message d'erreur s'il existe */}
-    </Container>
-  );
+      {/*{error && <ErrorText>{error}</ErrorText>} afficher le message d'erreur s'il existe */}
+      </Container>
+    );
 };
 
 const Title = styled.Text`

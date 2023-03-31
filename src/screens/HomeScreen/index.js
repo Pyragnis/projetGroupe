@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-const Index = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
   return (
     <Container>
       <TextStyled>READIFY</TextStyled>
@@ -15,7 +15,7 @@ const Index = ({ navigation }) => {
 };
 
 
-// creation des Styled Components
+// création des Styled Components
 const TextStyled = styled.Text`
   flex:1;
   font-size: 20px;
@@ -42,7 +42,6 @@ const Button = styled.TouchableOpacity`
 
 const ButtonText = styled.Text`
   font-size: 16px;
-  color: white;
 `;
 
-export default Index;
+export default HomeScreen;
