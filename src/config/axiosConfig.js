@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://example.com/api',
+  baseURL: 'https://login.hikkary.com/users/login',
   timeout: 5000,
 });
 

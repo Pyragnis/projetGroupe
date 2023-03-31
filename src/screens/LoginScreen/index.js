@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import axios from '../../config/axiosConfig';
+//import axios from '../../config/axiosConfig';
+import axios from 'axios';
 import React, {useState} from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
 import styled from 'styled-components';

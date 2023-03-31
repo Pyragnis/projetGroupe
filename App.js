@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import Routes from './src/config/routes';
 import { store } from './src/config/store';
 import ThemeContext, { ThemeProvider, lightTheme } from '../projetGroupe/src/components/ThemeContext';
-import { StatusBar, SafeAreaView } from 'react-native';
+import { StatusBar } from 'react-native';
 import styled from 'styled-components/native';
 
 const App = () => {
