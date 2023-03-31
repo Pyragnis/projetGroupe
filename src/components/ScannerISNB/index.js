@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
 
-const ScannerISBN = () => {
+const ScannerISBN = ({ navigation }) => {
   const [scanned, setScanned] = useState(false);
   const [bookData, setBookData] = useState({});
 
@@ -16,11 +16,15 @@ const ScannerISBN = () => {
       setBookData({
         title: book.title,
         description: book.description,
-        image: book.imageLinks.thumbnail,
+        image: book.imageLinks ? book.imageLinks.thumbnail : undefined, // vérifie si l'image existe
       });
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handlePress = () => {
+    navigation.goBack(); // retourne à la page précédente
   };
 
   return (
@@ -31,9 +35,12 @@ const ScannerISBN = () => {
       />
       {scanned && (
         <BookInfo>
-          <BookImage source={{ uri: bookData.image }} />
+          {bookData.image && <BookImage source={{ uri: bookData.image }} />}
           <BookTitle>{bookData.title}</BookTitle>
           <BookDescription>{bookData.description}</BookDescription>
+          <Button onPress={handlePress}>
+            <ButtonText>Retour</ButtonText>
+          </Button>
         </BookInfo>
       )}
     </Container>
@@ -71,6 +78,18 @@ const BookTitle = styled.Text`
 
 const BookDescription = styled.Text`
   font-size: 16px;
+`;
+
+const Button = styled.TouchableOpacity`
+  background-color: green;
+  padding: 10px;
+  border-radius: 99px;
+  margin: 14px;
+`;
+
+const ButtonText = styled.Text`
+  font-size: 16px;
+  color: white;
 `;
 
 export default ScannerISBN;

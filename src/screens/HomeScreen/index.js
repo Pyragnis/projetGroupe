@@ -6,32 +6,40 @@ const Index = ({ navigation }) => {
   return (
     <Container>
       <TextStyled>READIFY</TextStyled>
-      <Container>
+      <ButtonsContainer>
         <Button onPress={() => navigation.navigate('Home')}>
           <ButtonText>Home</ButtonText>
         </Button>
-      </Container>
+        <Button onPress={() => navigation.navigate('Scanner')}>
+          <ButtonText>Scanner</ButtonText>
+        </Button>
+        <Button onPress={() => navigation.navigate('Blibliotheque')}>
+          <ButtonText>Blibliothèque</ButtonText>
+        </Button>
+      </ButtonsContainer>
     </Container>
   ); 
 };
 
-
-// creation des Styled Components
+// création des Styled Components
 const TextStyled = styled.Text`
-  flex:1;
   font-size: 20px;
   text-align: center;
   color: #a6219d;
 `;
 
 const Container = styled.View`
-  position: absolute;
-  top: 20px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonsContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  padding: 10px;
+  width: 80%;
+  margin-top: 20px;
 `;
 
 const Button = styled.TouchableOpacity`
