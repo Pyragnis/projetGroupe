@@ -2,12 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axiosInstance from '../../config/axiosInstance';
 import React, {useState} from 'react';
-import Spinner from 'react-native-loading-spinner-overlay';
 import styled from 'styled-components';
 import Bandeau from '../../components/banderol';
+import SplashScreen from '../../components/SplashScreen';
 
 const Login = ({onLogin}) => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
   const [inputs, setInputs] = React.useState({
@@ -15,8 +15,14 @@ const Login = ({onLogin}) => {
     password: '',
   });
 
+    // This useEffect hook is used to simulate the time it takes to authenticate the user.
+    React.useEffect(() => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    }, []);
+
   const handleLogin = () => {
-    setLoading(true);
     setError(null);
     axiosInstance({
       method: 'POST',
@@ -31,7 +37,11 @@ const Login = ({onLogin}) => {
         AsyncStorage.setItem('token', res.headers['x-access-token'])
           .then(() => {
             onLogin(); // Ajoutez cette ligne pour appeler la fonction onLogin
-            navigation.navigate('Home');
+            // If isLoading is true, we render the SplashScreen component.
+            if (isLoading) {
+              return <SplashScreen />;
+              navigation.navigate('Home');
+            }
           })
           .catch(err => {
             //console.log('🚀 ~ file: login.js:6 ~ Login ~ err', err);
@@ -49,7 +59,7 @@ const Login = ({onLogin}) => {
   return (
     <Container>
       <Title>Connexion</Title>
-      <Spinner visible={loading} />
+      
       <Bandeau/>
       <TextInputStyled
         placeholder="Email"

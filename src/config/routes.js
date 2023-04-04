@@ -33,7 +33,6 @@ const Router= () => {
                 <HomeScreen {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
-            {/* Ajoutez cette ligne */}
           </Stack.Navigator>
         ) : (
           <Stack.Navigator

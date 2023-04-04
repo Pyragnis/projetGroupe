@@ -1,3 +1,4 @@
+/*
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { RNCamera } from 'react-native-camera';
@@ -74,3 +75,4 @@ const BookDescription = styled.Text`
 `;
 
 export default ScannerISBN;
+*/
