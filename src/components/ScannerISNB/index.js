@@ -16,7 +16,7 @@ const ScannerISBN = ({ navigation }) => {
       setBookData({
         title: book.title,
         description: book.description,
-        image: book.imageLinks ? book.imageLinks.thumbnail : undefined, // vérifie si l'image existe
+        image: book.imageLinks ? book.imageLinks.thumbnail : null, // vérifie si l'image existe
       });
     } catch (error) {
       console.error(error);
@@ -29,13 +29,18 @@ const ScannerISBN = ({ navigation }) => {
 
   return (
     <Container>
+      <TopBar>
+        <Button onPress={handlePress}>
+          <ButtonText>Retour</ButtonText>
+        </Button>
+      </TopBar>
       <Camera
         type={RNCamera.Constants.Type.back}
         onBarCodeRead={scanned ? undefined : handleBarCodeScanned}
       />
       {scanned && (
         <BookInfo>
-          {bookData.image && <BookImage source={{ uri: bookData.image }} />}
+          {bookData.image !== null && <BookImage source={{ uri: bookData.image }} />}
           <BookTitle>{bookData.title}</BookTitle>
           <BookDescription>{bookData.description}</BookDescription>
           <Button onPress={handlePress}>
@@ -49,6 +54,15 @@ const ScannerISBN = ({ navigation }) => {
 
 const Container = styled.View`
   flex: 1;
+`;
+
+const TopBar = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 16px;
 `;
 
 const Camera = styled(RNCamera)`
