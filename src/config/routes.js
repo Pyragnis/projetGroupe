@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ScannerISBN from '../components/ScannerISNB';
+import CategoriesPage from '../screens/CategoriesPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,11 @@ const Router= () => {
             <Stack.Screen name="Scanner">
               {props => (
                 <ScannerISBN {...props} onLogout={() => setIsLoggedIn(false)} />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Blibliotheque">
+              {props => (
+                <CategoriesPage {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
             {/* Ajoutez cette ligne */}
