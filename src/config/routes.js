@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import SettingsButton from '../components/SettingsButton';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +37,7 @@ const Router= () => {
                 <HomeScreen {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
+            <Stack.Screen name="Settings" component={SettingsScreen} />
           </Stack.Navigator>
         ) : (
           <Stack.Navigator
@@ -48,6 +51,7 @@ const Router= () => {
             </Stack.Screen>
           </Stack.Navigator>
         )}
+        <SettingsButton />
       </NavigationContainer>
     )
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+//import { Button } from 'react-native/types';
 import BackgroundImage from '../../components/PersonnalBackground';
 import Bandeau from '../../components/banderol';
 import styled from 'styled-components';
