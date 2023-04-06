@@ -8,14 +8,12 @@ const Index = ({ navigation }) => {
       <Logo source={require('../../../public/asset/logo.png')} />
       
       <ButtonsContainer>
-        <Button onPress={() => navigation.navigate('Home')}>
-          <ButtonText>Home</ButtonText>
-        </Button>
+      
         <Button onPress={() => navigation.navigate('Scanner')}>
           <ButtonText>Scanner</ButtonText>
         </Button>
         <Button onPress={() => navigation.navigate('Blibliotheque')}>
-          <ButtonText>Blibliothèque</ButtonText>
+          <ButtonText> categorie</ButtonText>
         </Button>
       </ButtonsContainer>
     </Container>
