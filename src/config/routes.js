@@ -7,7 +7,8 @@ import HomeScreen from '../screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
-//annuaire de toutes les pages de l'application par native-stack
+//annuaire de toutes les pages de l application par native-stack
+//si le token n'est pas enregistrer dans async-storage, l utilisateur est deconnecté
 const Router= () => {
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
@@ -17,7 +18,8 @@ const Router= () => {
           setIsLoggedIn(!!token);
         })
         .catch(err => {
-          // // console.log('🚀 ~ file: routes.js:6 ~ Routes ~ err', err);
+          //ici rajouter notifee
+          //console.log('🚀 ~ file: routes.js:6 ~ Routes ~ err', err);
         });
     }, []);
 

@@ -1,21 +1,25 @@
 import React from 'react';
-import styled from 'styled-components/native';
+import BackgroundImage from '../../components/PersonnalBackground';
+import Bandeau from '../../components/banderol';
+import styled from 'styled-components';
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <Container>
-      <TextStyled>READIFY</TextStyled>
+    <BackgroundImage source={require('../../../public/LogoF-violet.png')}>
+      <Bandeau source={require('../../../public/LogoN-violet.png')} />
       <Container>
-        <Button onPress={() => navigation.navigate('Home')}>
-          <ButtonText>Home</ButtonText>
-        </Button>
+        <Container>
+          <Button onPress={() => navigation.navigate('Home')}>
+            <ButtonText>Home</ButtonText>
+          </Button>
+        </Container>
       </Container>
-    </Container>
+    </BackgroundImage>
   ); 
 };
 
 
-// création des Styled Components
+// creation des Styled Components
 const TextStyled = styled.Text`
   flex:1;
   font-size: 20px;

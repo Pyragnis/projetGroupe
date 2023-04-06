@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components/native';
 import { useDispatch } from 'react-redux';
 import { fetchData } from '../../actions/SplashScreenLoader';
+import styled from 'styled-components/native';
 
 const SplashScreen = () => {
   const dispatch = useDispatch();

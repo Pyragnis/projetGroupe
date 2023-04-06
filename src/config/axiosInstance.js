@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
     if (!error.response) {
       // Non connexion
       console.log('Non connecté');
-      // Faire quelque chose pour gérer la non connexion
+      // Faire quelque chose pour gerer la non connexion
     } else {
       return Promise.reject(error);
     }
