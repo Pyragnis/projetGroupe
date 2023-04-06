@@ -6,6 +6,7 @@ import axios from 'axios';
 const ScannerISBN = ({ navigation }) => {
   const [scanned, setScanned] = useState(false);
   const [bookData, setBookData] = useState({});
+  const [cameraClicks, setCameraClicks] = useState(0);
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
@@ -26,17 +27,19 @@ const ScannerISBN = ({ navigation }) => {
   const handlePress = () => {
     navigation.goBack(); // retourne à la page précédente
   };
+  const handleCameraClick = () => {
+    setCameraClicks(cameraClicks + 1);
+    if (cameraClicks === 1) {
+      handlePress();
+    }
+  };
 
   return (
     <Container>
-      <TopBar>
-        <Button onPress={handlePress}>
-          <ButtonText>Retour</ButtonText>
-        </Button>
-      </TopBar>
       <Camera
         type={RNCamera.Constants.Type.back}
         onBarCodeRead={scanned ? undefined : handleBarCodeScanned}
+        onTouchEnd={handleCameraClick} // gestionnaire d'événements pour le clic sur la caméra
       />
       {scanned && (
         <BookInfo>
@@ -102,6 +105,20 @@ const Button = styled.TouchableOpacity`
 `;
 
 const ButtonText = styled.Text`
+  font-size: 16px;
+  color: white;
+`;
+
+const BackButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background-color: green;
+  padding: 10px;
+  border-radius: 99px;
+`;
+
+const BackButtonText = styled.Text`
   font-size: 16px;
   color: white;
 `;

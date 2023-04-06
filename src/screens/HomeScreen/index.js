@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import styled from 'styled-components/native';
 
 const Index = ({ navigation }) => {
   return (
     <Container>
-      <TextStyled>READIFY</TextStyled>
+      <Logo source={require('../../../public/asset/logo.png')} />
+      
       <ButtonsContainer>
         <Button onPress={() => navigation.navigate('Home')}>
           <ButtonText>Home</ButtonText>
@@ -32,6 +33,12 @@ const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+`;
+
+const Logo = styled.Image`
+  width: 500px;
+  height: 200px;
+  
 `;
 
 const ButtonsContainer = styled.View`
