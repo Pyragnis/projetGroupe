@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "323250229849",
+    "project_id": "readify-382212",
+    "storage_bucket": "readify-382212.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323250229849:android:393928537c965246665748",
+        "android_client_info": {
+          "package_name": "com.projetgroupe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323250229849-kqi2p5t2k1rfehd8g0661coilho9tpoj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeqkknvU0kr3dAay5jmVysrWM3ARRR1Pw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323250229849-kqi2p5t2k1rfehd8g0661coilho9tpoj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "323250229849-36dsi8fbla0kbmoa2a42tefkolug6t82.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.projetGroupe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
