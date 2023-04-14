@@ -1,0 +1,19 @@
+{
+    "en": {
+      "theme": "Theme",
+      "language": "Language",
+      "light": "Light",
+      "dark": "Dark",
+      "french": "French",
+      "english": "English"
+    },
+    "fr": {
+      "theme": "Thème",
+      "language": "Langue",
+      "light": "Clair",
+      "dark": "Foncé",
+      "french": "Français",
+      "english": "Anglais"
+    }
+  }
+  

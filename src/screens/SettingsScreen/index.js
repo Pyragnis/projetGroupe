@@ -1,65 +1,136 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-//import { Switch } from 'react-native-elements';
-//import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components/native';
+import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SettingsScreen = ({ route }) => {
+const Settings = ({ route }) => {
   const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState('system');
+  const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
 
-  const handleThemeChange = (value) => {
+  const handleThemeChange = async (value) => {
     if (value) {
       setTheme('dark');
+      await AsyncStorage.setItem('theme', 'dark');
       route.params.handleThemeChange('dark');
     } else {
       setTheme('light');
+      await AsyncStorage.setItem('theme', 'light');
       route.params.handleThemeChange('light');
     }
   };
 
-  const handleLanguageChange = (language) => {
-    i18n.changeLanguage(language);
+  const handleLanguageChange = async (language) => {
+    await i18n.changeLanguage(language);
+    await AsyncStorage.setItem('language', language);
     route.params.handleLanguageChange(language);
   };
 
+  useEffect(() => {
+    AsyncStorage.getItem('theme').then((value) => {
+      if (value) {
+        setTheme(value);
+      }
+    });
+
+    AsyncStorage.getItem('language').then((value) => {
+      if (value) {
+        i18n.changeLanguage(value);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      setBackgroundColor('#1E1E1E');
+    } else {
+      setBackgroundColor('#FFFFFF');
+    }
+  }, [theme]);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('theme')}</Text>
-        <Switch
-          value={theme === 'dark'}
-          onValueChange={handleThemeChange}
-        />
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('language')}</Text>
-        <Switch
-          value={i18n.language === 'fr'}
-          onValueChange={() => handleLanguageChange('fr')}
-        />
-        <Switch
-          value={i18n.language === 'en'}
-          onValueChange={() => handleLanguageChange('en')}
-        />
-      </View>
-    </View>
+    <Container backgroundColor={backgroundColor}>
+<Section>
+  <SectionTitle theme={theme}>{t('theme')}</SectionTitle>
+  <SwitchContainer>
+    <SwitchLabel theme={theme}>{t('light')}</SwitchLabel>
+    <Switch
+      value={theme === 'dark'}
+      onValueChange={handleThemeChange}
+    />
+    <SwitchLabel theme={theme}>{t('dark')}</SwitchLabel>
+  </SwitchContainer>
+</Section>
+<Section>
+  <SectionTitle theme={theme}>{t('language')}</SectionTitle>
+  <RadioButtonsContainer>
+    <RadioButton
+      selected={i18n.language === 'fr'}
+      onPress={() => handleLanguageChange('fr')}
+    >
+      <RadioButtonLabel theme={theme}>{t('french')}</RadioButtonLabel>
+    </RadioButton>
+    <RadioButton
+      selected={i18n.language === 'en'}
+      onPress={() => handleLanguageChange('en')}
+    >
+      <RadioButtonLabel theme={theme}>{t('english')}</RadioButtonLabel>
+    </RadioButton>
+  </RadioButtonsContainer>
+</Section>
+
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-});
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ backgroundColor }) => backgroundColor};
+`;
 
-export default SettingsScreen;
+const Section = styled.View`
+  margin-bottom: 20px;
+`;
+
+const SectionTitle = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: ${({ theme }) => (theme === 'dark' ? '#FFFFFF' : '#000000')};
+`;
+
+const SwitchContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Switch = styled.Switch``;
+
+const SwitchLabel = styled.Text`
+  margin-horizontal: 10px;
+  color: ${({ backgroundColor, theme }) =>
+    theme === 'dark' ? '#FFFFFF' : backgroundColor === '#1E1E1E' ? '#FFFFFF' : '#000000'};
+`;
+
+const RadioButtonsContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+`;
+
+const RadioButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const RadioButtonLabel = styled.Text`
+  margin-left: 10px;
+  font-size: 16px;
+  color: ${({ theme }) => (theme === 'dark' ? '#FFFFFF' : '#000000')};
+`;
+
+
+export default Settings;

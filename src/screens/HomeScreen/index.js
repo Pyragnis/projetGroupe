@@ -1,10 +1,13 @@
 import React from 'react';
-//import { Button } from 'react-native/types';
+import SettingsButton from '../../components/SettingsButton';
 import BackgroundImage from '../../components/PersonnalBackground';
 import Bandeau from '../../components/banderol';
 import styled from 'styled-components';
+import { useNavigation } from '@react-navigation/native'; // import de useNavigation
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
+  const navigation = useNavigation(); // initialisation de la navigation
+
   return (
     <BackgroundImage source={require('../../../public/LogoF-violet.png')}>
       <Bandeau source={require('../../../public/LogoN-violet.png')} />
@@ -15,10 +18,10 @@ const HomeScreen = ({ navigation }) => {
           </Button>
         </Container>
       </Container>
+      <SettingsButton onPress={() => navigation.navigate('Settings')} />
     </BackgroundImage>
   ); 
 };
-
 
 // creation des Styled Components
 const TextStyled = styled.Text`

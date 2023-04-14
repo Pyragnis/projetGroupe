@@ -1,10 +1,9 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { setTheme } from '../../actions/themeActions';
 import { setLanguage } from '../../actions/languageActions';
+import styled from 'styled-components/native';
 
 const SettingsButton = () => {
   const navigation = useNavigation();
@@ -19,24 +18,34 @@ const SettingsButton = () => {
   };
 
   return (
-    <Button
-      title="Settings"
+    <RoundButton 
       onPress={() => {
         navigation.navigate('Settings', {
           handleThemeChange: handleThemeChange,
           handleLanguageChange: handleLanguageChange,
         });
       }}
-      buttonStyle={styles.button}
-    />
+    >
+      <ButtonText>Settings</ButtonText>
+    </RoundButton>
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: 'transparent',
-    color: '#000',
-  },
-});
+const RoundButton = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 70px;
+  height: 32px;
+  border-radius: 25px;
+  background-color: green;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+`;
 
 export default SettingsButton;
