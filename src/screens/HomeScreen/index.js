@@ -15,6 +15,9 @@ const Index = ({ navigation }) => {
         <Button onPress={() => navigation.navigate('Blibliotheque')}>
           <ButtonText> categorie</ButtonText>
         </Button>
+        <Button onPress={() => navigation.navigate('testbd')}>
+          <ButtonText> testbd </ButtonText>
+        </Button>
       </ButtonsContainer>
     </Container>
   ); 
