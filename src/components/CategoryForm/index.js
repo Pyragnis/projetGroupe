@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addCategory } from '../../actions/addCategory';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import styled from 'styled-components/native';
 
 const Button = styled.TouchableOpacity`
@@ -24,6 +24,7 @@ const CategoryForm = () => {
   const handleSubmit = () => {
     dispatch(addCategory(categoryName));
     setCategoryName('');
+    Alert.alert('Success', 'nouvelle catégorie ajouter');
   };
 
   return (

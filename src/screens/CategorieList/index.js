@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { firebase } from '../../config/FirebaseConfig';
 import { View, Text, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
+import { Alert } from 'react-native';
+
 
 const CategoryContainer = styled.View`
   background-color: ${({ bgColor }) => bgColor};
@@ -74,14 +76,31 @@ const CategoryList = ({ navigation }) => {
   }
 
   const deleteCategory = (categoryId) => {
-    firebase.firestore().collection('categories').doc(categoryId).delete()
-      .then(() => {
-        console.log('Category deleted successfully');
-      })
-      .catch((error) => {
-        console.log('Error deleting category:', error);
-      });
+    Alert.alert(
+      'Confirmation',
+      'Êtes-vous sûr de vouloir supprimer cette catégorie ?',
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Supprimer',
+          onPress: () => {
+            firebase.firestore().collection('categories').doc(categoryId).delete()
+              .then(() => {
+                console.log('Category deleted successfully');
+              })
+              .catch((error) => {
+                console.log('Error deleting category:', error);
+              });
+          },
+        },
+      ],
+      { cancelable: true },
+    );
   };
+  
 
   return (
     <View style={{ flex: 1 }}>

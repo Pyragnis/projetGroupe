@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
 import { firebase } from '../../config/FirebaseConfig';
 
@@ -14,11 +14,18 @@ const BookCard = styled.View`
   margin: 10px;
   border-radius: 5px;
   elevation: 3;
+  align-items: center;
 `;
+
 
 const BookTitle = styled.Text`
   font-size: 20px;
   font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const ISBN = styled.Text`
+  font-size: 16px;
 `;
 
 const BackButton = styled.TouchableOpacity`
@@ -53,9 +60,12 @@ const BookList = ({ navigation }) => {
   const renderBook = ({ item }) => (
     <BookCard>
       <BookTitle>{item.title}</BookTitle>
-      {item.description && <Text>{item.description}</Text>}
-      {item.image && <Image source={{ uri: item.image }} style={{ width: 100, height: 150 }} />}
-      <Text>ISBN: {item.isbn}</Text>
+      {item.image ? (
+        <Image source={{ uri: item.image.replace("http", "https") }} style={{ width: 100, height: 150, marginBottom: 10 }} />
+      ) : (
+        <Image source={require('../../../public/asset/image.jpg')} style={{ width: 100, height: 150, marginBottom: 10 }} />
+      )}
+      <ISBN>ISBN: {item.isbn}</ISBN>
     </BookCard>
   );
 
