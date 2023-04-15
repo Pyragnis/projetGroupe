@@ -9,6 +9,7 @@ import CategoriesPage from '../screens/CategoriesPage';
 import ListCardCategorie from '../components/listCardCategorie';
 import CategorieFire from '../screens/CategorieFire';
 import Testbd from '../screens/testbd';
+import CategoryList from '../screens/CategorieList';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,9 +44,9 @@ const Router= () => {
                 <ScannerISBN {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
-            <Stack.Screen name="testbd">
+            <Stack.Screen name="CategorieList">
               {props => (
-                <Testbd {...props} onLogout={() => setIsLoggedIn(false)} />
+                <CategoryList {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
             <Stack.Screen name="ListCategorie">

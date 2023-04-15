@@ -13,10 +13,10 @@ const Index = ({ navigation }) => {
           <ButtonText>Scanner</ButtonText>
         </Button>
         <Button onPress={() => navigation.navigate('Blibliotheque')}>
-          <ButtonText> categorie</ButtonText>
+          <ButtonText> add categorie</ButtonText>
         </Button>
-        <Button onPress={() => navigation.navigate('testbd')}>
-          <ButtonText> testbd </ButtonText>
+        <Button onPress={() => navigation.navigate('CategorieList')}>
+          <ButtonText> list Categorie </ButtonText>
         </Button>
       </ButtonsContainer>
     </Container>
@@ -52,7 +52,7 @@ const ButtonsContainer = styled.View`
 
 const Button = styled.TouchableOpacity`
   background-color: green;
-  padding: 10px;
+  padding: 5px;
   border-radius: 99px;
   margin: 14px;
 `;
