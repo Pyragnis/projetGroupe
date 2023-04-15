@@ -4,6 +4,7 @@ import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
 import { firebase } from '../../config/FirebaseConfig';
 
+
 const ScannerISBN = ({ navigation }) => {
   const [scanned, setScanned] = useState(false);
   const [cameraClicks, setCameraClicks] = useState(0);

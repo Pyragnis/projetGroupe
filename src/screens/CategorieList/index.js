@@ -17,6 +17,7 @@ const CategoryContainer = styled.View`
 const CategoryName = styled.Text`
   font-size: 20px;
   font-weight: bold;
+  margin-bottom:120px;
 `;
 
 const BackButton = styled.TouchableOpacity`
@@ -26,6 +27,19 @@ const BackButton = styled.TouchableOpacity`
   margin: 10px;
 `;
 
+const DeleteButton = styled.TouchableOpacity`
+  background-color: #f00;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 10px;
+`;
+
+const DeleteButtonText = styled.Text`
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  
+`;
 const BackButtonText = styled.Text`
   color: white;
   font-weight: bold;
@@ -49,12 +63,25 @@ const CategoryList = ({ navigation }) => {
   const renderCategory = ({ item }) => (
     <CategoryContainer bgColor={item.bgColor}>
       <CategoryName>{item.name}</CategoryName>
+      <DeleteButton onPress={() => deleteCategory(item.id)}>
+        <DeleteButtonText>Supprimer</DeleteButtonText>
+      </DeleteButton>
     </CategoryContainer>
   );
 
   const handleBackPress = () => {
     navigation.goBack();
   }
+
+  const deleteCategory = (categoryId) => {
+    firebase.firestore().collection('categories').doc(categoryId).delete()
+      .then(() => {
+        console.log('Category deleted successfully');
+      })
+      .catch((error) => {
+        console.log('Error deleting category:', error);
+      });
+  };
 
   return (
     <View style={{ flex: 1 }}>

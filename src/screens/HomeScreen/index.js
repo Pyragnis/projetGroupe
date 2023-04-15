@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 const Index = ({ navigation }) => {
   return (
     <Container>
-      <Logo source={require('../../../public/asset/logo.png')} />
+      <Logo source={require('../../../public/asset/logo.png')}/>
       
       <ButtonsContainer>
       
