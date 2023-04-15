@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
-import { fireabase } from '../../config/FirebaseConfig';
+import { firebase } from '../../config/FirebaseConfig';
 
 const ScannerISBN = ({ navigation }) => {
   const [scanned, setScanned] = useState(false);
