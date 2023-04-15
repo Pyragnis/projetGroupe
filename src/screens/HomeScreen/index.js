@@ -18,6 +18,9 @@ const Index = ({ navigation }) => {
         <Button onPress={() => navigation.navigate('CategorieList')}>
           <ButtonText> list Categorie </ButtonText>
         </Button>
+        <Button onPress={() => navigation.navigate('Booklist')}>
+          <ButtonText> liste livres </ButtonText>
+        </Button>
       </ButtonsContainer>
     </Container>
   ); 
@@ -43,23 +46,25 @@ const Logo = styled.Image`
 `;
 
 const ButtonsContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 80%;
   margin-top: 20px;
 `;
 
 const Button = styled.TouchableOpacity`
   background-color: green;
-  padding: 5px;
-  border-radius: 99px;
+  padding: 10px 25px;
+  border-radius: 25px;
   margin: 14px;
 `;
 
 const ButtonText = styled.Text`
   font-size: 16px;
   color: white;
+  text-align: center;
 `;
+
 
 export default Index;

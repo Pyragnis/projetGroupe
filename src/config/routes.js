@@ -6,7 +6,7 @@ import Login from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ScannerISBN from '../components/ScannerISNB';
 import CategoriesPage from '../screens/CategoriesPage';
-import ListCardCategorie from '../components/listCardCategorie';
+import BookList from '../screens/BookList';
 import CategorieFire from '../screens/CategorieFire';
 import Testbd from '../screens/testbd';
 import CategoryList from '../screens/CategorieList';
@@ -49,9 +49,9 @@ const Router= () => {
                 <CategoryList {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
-            <Stack.Screen name="ListCategorie">
+            <Stack.Screen name="Booklist">
               {props => (
-                <ListCardCategorie {...props} onLogout={() => setIsLoggedIn(false)} />
+                <BookList {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
             <Stack.Screen name="Blibliotheque">
