@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
-import { db } from '../../config/FirebaseConfig';
+import { fireabase } from '../../config/FirebaseConfig';
 
 const ScannerISBN = ({ navigation }) => {
   const [scanned, setScanned] = useState(false);
@@ -22,7 +22,7 @@ const ScannerISBN = ({ navigation }) => {
       const isbn = data;
 
       // Ajout du livre scanné à Firestore
-      await db.collection('books').add({
+      await firebase.firestore().collection('livres').add({
         title,
         description,
         image,
