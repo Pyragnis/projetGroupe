@@ -23,6 +23,7 @@ const Index = ({ navigation }) => {
         </Button>
       </ButtonsContainer>
     </Container>
+    <wael></wael>
   ); 
 };
 
