@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+/*import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
@@ -124,3 +124,4 @@ const BackButtonText = styled.Text`
 `;
 
 export default ScannerISBN;
+*/
