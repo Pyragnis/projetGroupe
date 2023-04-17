@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { firebase } from '../../config/FirebaseConfig';
 import { View, Text, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { Alert } from 'react-native';
-
+import { SearchBar } from 'react-native-elements';
 
 const CategoryContainer = styled.View`
   background-color: ${({ bgColor }) => bgColor};
@@ -19,7 +19,7 @@ const CategoryContainer = styled.View`
 const CategoryName = styled.Text`
   font-size: 20px;
   font-weight: bold;
-  margin-bottom:120px;
+  margin-bottom:120px; /* Ce style est probablement une erreur */
 `;
 
 const BackButton = styled.TouchableOpacity`
@@ -40,8 +40,8 @@ const DeleteButtonText = styled.Text`
   color: white;
   font-weight: bold;
   text-align: center;
-  
 `;
+
 const BackButtonText = styled.Text`
   color: white;
   font-weight: bold;
@@ -50,17 +50,40 @@ const BackButtonText = styled.Text`
 
 const CategoryList = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [categories, setCategories] = React.useState([]);
+  const [categories, setCategories] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [sorting, setSorting] = useState('asc'); // Ajout d'une variable sorting et de son état initial
 
   useEffect(() => {
-    const unsubscribe = firebase.firestore()
+    const unsubscribe = firebase
+      .firestore()
       .collection('categories')
       .onSnapshot((querySnapshot) => {
-        const categories = querySnapshot.docs.map((doc) => ({ id: doc.id, name: doc.data().name, bgColor: getRandomColor() }));
-        setCategories(categories);
+        const categories = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          bgColor: getRandomColor(),
+        }));
+        const sortedCategories = categories.sort((a, b) => a.name.localeCompare(b.name));
+        setCategories(sortedCategories);
       });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const filtered = categories.filter(
+      (category) => category.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1,
+    );
+    const sortedFilteredCategories = filtered.sort((a, b) => {
+      if (sorting === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+    setFilteredCategories(sortedFilteredCategories);
+  }, [searchText, categories, sorting]);
 
   const renderCategory = ({ item }) => (
     <CategoryContainer bgColor={item.bgColor}>
@@ -73,59 +96,76 @@ const CategoryList = ({ navigation }) => {
 
   const handleBackPress = () => {
     navigation.goBack();
-  }
+  };
+  const Search = ({ searchText, setSearchText, placeholder }) => {
+    return (
+      <SearchBar
+        platform="ios"
+        value={searchText}
+        placeholder={placeholder}
+        onChangeText={setSearchText}
+            />
+          );
+        };
+
 
   const deleteCategory = (categoryId) => {
     Alert.alert(
-      'Confirmation',
+      'Supprimer la catégorie',
       'Êtes-vous sûr de vouloir supprimer cette catégorie ?',
       [
         {
           text: 'Annuler',
+          onPress: () => console.log('Annuler Pressed'),
           style: 'cancel',
         },
         {
           text: 'Supprimer',
-          onPress: () => {
-            firebase.firestore().collection('categories').doc(categoryId).delete()
+          onPress: () =>
+            firebase
+              .firestore()
+              .collection('categories')
+              .doc(categoryId)
+              .delete()
               .then(() => {
-                console.log('Category deleted successfully');
+                console.log('Catégorie supprimée !');
               })
               .catch((error) => {
-                console.log('Error deleting category:', error);
-              });
-          },
+                console.error('Erreur lors de la suppression de la catégorie : ', error);
+              }),
+          style: 'destructive',
         },
       ],
-      { cancelable: true },
+      { cancelable: false },
     );
   };
-  
 
   return (
-    <View style={{ flex: 1 }}>
+    <View>
+      <BackButton onPress={handleBackPress}>
+        <BackButtonText>Retour</BackButtonText>
+      </BackButton>
+      <Search searchText={searchText} setSearchText={setSearchText} placeholder="Rechercher une catégorie" />
+      <TouchableOpacity onPress={() => setSorting(sorting === 'asc' ? 'desc' : 'asc')}>
+        <Text>Trier par nom ({sorting === 'asc' ? 'ascendant' : 'descendant'})</Text>
+      </TouchableOpacity>
       <FlatList
-        data={categories}
+        data={filteredCategories}
         renderItem={renderCategory}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        key={`${
-          Dimensions.get('window').width / 2 // unique key based on width of device
-        }-${categories.length}`} // unique key based on number of categories
-        ListFooterComponent={
-          <BackButton onPress={handleBackPress}>
-            <BackButtonText>Retour</BackButtonText>
-          </BackButton>
-        }
       />
     </View>
   );
 };
-
-const getRandomColor = () => {
-  const colors = ['#ff6666', '#ffcc66', '#66ff66', '#66cccc', '#6666ff', '#cc66ff'];
-  const randomIndex = Math.floor(Math.random() * colors.length);
-  return colors[randomIndex];
-};
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 export default CategoryList;
+

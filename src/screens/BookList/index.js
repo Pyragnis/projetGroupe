@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
 import { firebase } from '../../config/FirebaseConfig';
+import { SearchBar } from 'react-native-elements';
 
 const BookListContainer = styled.View`
   flex: 1;
@@ -16,7 +17,6 @@ const BookCard = styled.View`
   elevation: 3;
   align-items: center;
 `;
-
 
 const BookTitle = styled.Text`
   font-size: 20px;
@@ -41,20 +41,43 @@ const BackButtonText = styled.Text`
   text-align: center;
 `;
 
+const Footer = styled.View`
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  backgroundColor: 'green',
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+`;
+
+const BackIcon = styled.Image`
+  width: 20px;
+  height: 20px;
+`;
+
 const BookList = ({ navigation }) => {
   const [books, setBooks] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredBooks, setFilteredBooks] = useState([]);
 
   useEffect(() => {
     const unsubscribe = firebase.firestore().collection('livres')
       .onSnapshot((querySnapshot) => {
         const books = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setBooks(books);
+        setFilteredBooks(books);
       });
     return () => unsubscribe();
   }, []);
 
   const handleBackPress = () => {
     navigation.goBack();
+  };
+
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+    const filtered = books.filter((book) => book.title.toLowerCase().includes(text.toLowerCase()));
+    setFilteredBooks(filtered);
   };
 
   const renderBook = ({ item }) => (
@@ -71,17 +94,15 @@ const BookList = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={books}
-        renderItem={renderBook}
-        keyExtractor={(item) => item.id}
-        ListFooterComponent={
-          <BackButton onPress={handleBackPress}>
-            <BackButtonText>Retour</BackButtonText>
-          </BackButton>
-        }
+      <SearchBar
+        placeholder="Rechercher un livre..."
+        onChangeText={handleSearch}
+        value={searchQuery}
+        inputContainerStyle={{ backgroundColor: 'green' }}
       />
+      
     </View>
+
   );
 };
 
