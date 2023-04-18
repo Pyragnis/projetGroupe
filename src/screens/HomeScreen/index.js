@@ -1,55 +1,62 @@
 import React from 'react';
-import SettingsButton from '../../components/SettingsButton';
-import BackgroundImage from '../../components/PersonnalBackground';
-import Bandeau from '../../components/banderol';
-import styled from 'styled-components';
-import { useNavigation } from '@react-navigation/native'; // import de useNavigation
-
-const HomeScreen = () => {
-  const navigation = useNavigation(); // initialisation de la navigation
-
+import { Text, View, Image } from 'react-native';
+import styled from 'styled-components/native';
+const Index = ({ navigation }) => {
   return (
-    <BackgroundImage source={require('../../../public/LogoF-violet.png')}>
-      <Bandeau source={require('../../../public/LogoN-violet.png')} />
-      <Container>
-        <Container>
-          <Button onPress={() => navigation.navigate('Home')}>
-            <ButtonText>Home</ButtonText>
-          </Button>
-        </Container>
-      </Container>
-      <SettingsButton onPress={() => navigation.navigate('Settings')} />
-    </BackgroundImage>
+    <Container>
+      <Logo source={require('../../../public/asset/logo.png')}/>
+      
+      <ButtonsContainer>
+      
+        <Button onPress={() => navigation.navigate('Scanner')}>
+          <ButtonText>Scanner</ButtonText>
+        </Button>
+        <Button onPress={() => navigation.navigate('Blibliotheque')}>
+          <ButtonText> add categorie</ButtonText>
+        </Button>
+        <Button onPress={() => navigation.navigate('CategorieList')}>
+          <ButtonText> list Categorie </ButtonText>
+        </Button>
+        <Button onPress={() => navigation.navigate('Booklist')}>
+          <ButtonText> liste livres </ButtonText>
+        </Button>
+      </ButtonsContainer>
+    </Container>
   ); 
 };
 
-// creation des Styled Components
+// création des Styled Components
 const TextStyled = styled.Text`
-  flex:1;
   font-size: 20px;
   text-align: center;
   color: #a6219d;
 `;
-
 const Container = styled.View`
-  position: absolute;
-  top: 20px;
-  flex-direction: row;
-  justify-content: space-between;
+  flex: 1;
+  justify-content: center;
   align-items: center;
-  width: 100%;
-  padding: 10px;
 `;
-
+const Logo = styled.Image`
+  width: 500px;
+  height: 200px;
+  
+`;
+const ButtonsContainer = styled.View`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+`;
 const Button = styled.TouchableOpacity`
   background-color: green;
-  padding: 10px;
-  border-radius: 99px;
+  padding: 10px 25px;
+  border-radius: 25px;
   margin: 14px;
 `;
-
 const ButtonText = styled.Text`
   font-size: 16px;
+  color: white;
+  text-align: center;
 `;
-
-export default HomeScreen;
+export default Index;

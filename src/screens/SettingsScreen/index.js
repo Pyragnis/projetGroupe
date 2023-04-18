@@ -3,12 +3,10 @@ import styled from 'styled-components/native';
 import "../../config/translation";
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Notifee from '@notifee/react-native';
 
 const Settings = ({ route }) => {
   const [theme, setTheme] = useState('system');
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
-  Notifee.init({});
 
   const handleThemeChange = async (value) => {
     if (value) {
@@ -53,10 +51,20 @@ const Settings = ({ route }) => {
       </Section>
       <Section>
         <SectionTitle theme={theme}>{t('language')}</SectionTitle>
-          <div>
-            <button onClick={() => i18n.changeLanguage("fr")}>Francais</button>
-            <button onClick={() => i18n.changeLanguage("en")}>Anglais</button>
-          </div>
+        <RadioButtonsContainer>
+          <RadioButton
+            selected={i18n.language === 'fr'}
+            onPress={() => handleLanguageChange('fr')}
+          >
+            <RadioButtonLabel theme={theme}>{t('french')}</RadioButtonLabel>
+          </RadioButton>
+          <RadioButton
+            selected={i18n.language === 'en'}
+            onPress={() => handleLanguageChange('en')}
+          >
+            <RadioButtonLabel theme={theme}>{t('english')}</RadioButtonLabel>
+          </RadioButton>
+        </RadioButtonsContainer>
       </Section>
     </Container>
   );
