@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import { firebase } from '../../config/FirebaseConfig';
 
@@ -16,7 +16,6 @@ const BookCard = styled.View`
   elevation: 3;
   align-items: center;
 `;
-
 
 const BookTitle = styled.Text`
   font-size: 20px;
@@ -35,27 +34,124 @@ const BackButton = styled.TouchableOpacity`
   margin: 10px;
 `;
 
-const BackButtonText = styled.Text`
+const ButtonText = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const AddToCategoryButton = styled.TouchableOpacity`
+  background-color: #4CAF50;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+`;
+
+const AddToCategoryButtonText = styled.Text`
   color: white;
   font-weight: bold;
   text-align: center;
 `;
 
+//modal style
+const ModalContent = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  margin-top:15%;
+`;
+
+const ModalInnerContent = styled.View`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+`;
+
+const ModalTitle = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #008000;
+  margin-top:10%;
+`;
+
+const CategoryButton = styled.TouchableOpacity`
+  margin-bottom: 10px;
+  background-color: #008000;
+  padding: 10px 20px;
+  border-radius: 20px;
+  align-items: center;
+`;
+
+const CategoryButtonText = styled.Text`
+  font-size: 16px;
+  color: #fff;
+`;
+
+const CancelButton = styled.TouchableOpacity`
+  margin-top: 20px;
+`;
+
+const CancelButtonText = styled.Text`
+  color: red;
+`;
+const ModalCloseIcon = styled.TouchableOpacity`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
+
+const ModalCloseIconText = styled.Text`
+  font-size: 20px;
+  color: #008000;
+`;
+
+
+
 const BookList = ({ navigation }) => {
   const [books, setBooks] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [selectedBookId, setSelectedBookId] = useState(null);
+
 
   useEffect(() => {
-    const unsubscribe = firebase.firestore().collection('livres')
+    const unsubscribeBooks = firebase.firestore().collection('livres')
       .onSnapshot((querySnapshot) => {
         const books = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setBooks(books);
       });
-    return () => unsubscribe();
+    const unsubscribeCategories = firebase.firestore().collection('categories')
+      .onSnapshot((querySnapshot) => {
+        const categories = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setCategories(categories);
+      });
+    return () => {
+      unsubscribeBooks();
+      unsubscribeCategories();
+    };
   }, []);
 
-  const handleBackPress = () => {
-    navigation.goBack();
+  
+
+  const handleAddToCategoryPress = (bookId) => {
+    setSelectedBookId(bookId);
+    setModalVisible(true);
   };
+  
+
+  const handleCategoryPress = async (categoryId) => {
+    try {
+      const categoryRef = firebase.firestore().collection('categories').doc(categoryId);
+      const categoryData = await categoryRef.get();
+      const newBooks = [...categoryData.data().books, selectedBookId]; // Utilisation de selectedBookId
+      await categoryRef.update({ books: newBooks });
+      console.log('Book added to category:', categoryId);
+      setModalVisible(false); // Fermer la modal après la mise à jour de la catégorie
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
 
   const renderBook = ({ item }) => (
     <BookCard>
@@ -66,6 +162,9 @@ const BookList = ({ navigation }) => {
         <Image source={require('../../../public/asset/image.jpg')} style={{ width: 100, height: 150, marginBottom: 10 }} />
       )}
       <ISBN>ISBN: {item.isbn}</ISBN>
+      <AddToCategoryButton onPress={() => handleAddToCategoryPress(item.id)}>
+        <AddToCategoryButtonText>Ajouter à une catégorie</AddToCategoryButtonText>
+      </AddToCategoryButton>
     </BookCard>
   );
 
@@ -75,14 +174,42 @@ const BookList = ({ navigation }) => {
         data={books}
         renderItem={renderBook}
         keyExtractor={(item) => item.id}
-        ListFooterComponent={
-          <BackButton onPress={handleBackPress}>
-            <BackButtonText>Retour</BackButtonText>
-          </BackButton>
-        }
       />
+      <BackButton onPress={() => navigation.goBack()}>
+        <ButtonText>Back</ButtonText>
+      </BackButton>
+
+      <Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible && selectedBookId !== null} // Vérification de selectedBookId
+  onRequestClose={() => {
+    setModalVisible(false);
+  }}
+>
+
+  <ModalContent>
+    <ModalInnerContent>
+      <ModalCloseIcon onPress={() => setModalVisible(false)}>
+        <ModalCloseIconText>X</ModalCloseIconText>
+      </ModalCloseIcon>
+      <ModalTitle>Choisir une catégorie</ModalTitle>
+      <FlatList
+        data={categories}
+        renderItem={({ item }) => (
+          <CategoryButton onPress={() => handleCategoryPress(item.id)}>
+            <CategoryButtonText>{item.name}</CategoryButtonText>
+          </CategoryButton>
+        )}
+        keyExtractor={(item) => item.id}
+      />
+      <CancelButton onPress={() => setModalVisible(false)}>
+        <CancelButtonText>Annuler</CancelButtonText>
+      </CancelButton>
+    </ModalInnerContent>
+  </ModalContent>
+</Modal>
     </View>
   );
 };
-
 export default BookList;
