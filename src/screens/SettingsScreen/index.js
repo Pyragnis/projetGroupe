@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
+import "../../config/translation";
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Notifee from '@notifee/react-native';
 
 const Settings = ({ route }) => {
-  const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState('system');
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+  Notifee.init({});
 
   const handleThemeChange = async (value) => {
     if (value) {
@@ -20,25 +22,13 @@ const Settings = ({ route }) => {
     }
   };
 
-  const handleLanguageChange = async (language) => {
-    await i18n.changeLanguage(language);
-    await AsyncStorage.setItem('language', language);
-    route.params.handleLanguageChange(language);
-  };
+  const { t, i18n } = useTranslation();
 
-  useEffect(() => {
-    AsyncStorage.getItem('theme').then((value) => {
-      if (value) {
-        setTheme(value);
-      }
-    });
-
-    AsyncStorage.getItem('language').then((value) => {
-      if (value) {
-        i18n.changeLanguage(value);
-      }
-    });
-  }, []);
+  AsyncStorage.getItem('theme').then((value) => {
+    if (value) {
+      setTheme(value);
+    }
+  });
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -50,35 +40,24 @@ const Settings = ({ route }) => {
 
   return (
     <Container backgroundColor={backgroundColor}>
-<Section>
-  <SectionTitle theme={theme}>{t('theme')}</SectionTitle>
-  <SwitchContainer>
-    <SwitchLabel theme={theme}>{t('light')}</SwitchLabel>
-    <Switch
-      value={theme === 'dark'}
-      onValueChange={handleThemeChange}
-    />
-    <SwitchLabel theme={theme}>{t('dark')}</SwitchLabel>
-  </SwitchContainer>
-</Section>
-<Section>
-  <SectionTitle theme={theme}>{t('language')}</SectionTitle>
-  <RadioButtonsContainer>
-    <RadioButton
-      selected={i18n.language === 'fr'}
-      onPress={() => handleLanguageChange('fr')}
-    >
-      <RadioButtonLabel theme={theme}>{t('french')}</RadioButtonLabel>
-    </RadioButton>
-    <RadioButton
-      selected={i18n.language === 'en'}
-      onPress={() => handleLanguageChange('en')}
-    >
-      <RadioButtonLabel theme={theme}>{t('english')}</RadioButtonLabel>
-    </RadioButton>
-  </RadioButtonsContainer>
-</Section>
-
+      <Section>
+        <SectionTitle theme={theme}>{t('theme')}</SectionTitle>
+        <SwitchContainer>
+          <SwitchLabel theme={theme}>{t('light')}</SwitchLabel>
+          <Switch
+            value={theme === 'dark'}
+            onValueChange={handleThemeChange}
+          />
+          <SwitchLabel theme={theme}>{t('dark')}</SwitchLabel>
+        </SwitchContainer>
+      </Section>
+      <Section>
+        <SectionTitle theme={theme}>{t('language')}</SectionTitle>
+          <div>
+            <button onClick={() => i18n.changeLanguage("fr")}>Francais</button>
+            <button onClick={() => i18n.changeLanguage("en")}>Anglais</button>
+          </div>
+      </Section>
     </Container>
   );
 };

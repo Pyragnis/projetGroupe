@@ -7,4 +7,5 @@ export default combineReducers({
   counter,
   theme: themeReducer,
   language: languageReducer,
+  //auth: authReducer,
 });

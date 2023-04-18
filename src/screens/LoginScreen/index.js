@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axiosInstance from '../../config/axiosInstance';
+//import axiosInstance from '../../config/axiosInstance';
 import SplashScreen from '../../components/SplashScreen';
 import Bandeau from '../../components/banderol';
 import BackgroundImage from '../../components/PersonnalBackground';
 import styled from 'styled-components';
+import { signIn } from '../../actions/firebaseAuth';
 
 const Login = ({onLogin}) => {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -25,39 +26,18 @@ const Login = ({onLogin}) => {
 
   const handleLogin = () => {
     setError(null);
-    axiosInstance({
-      method: 'POST',
-      url: 'https://login.hikkary.com/users/login',
-      data: {
-        username: inputs.email,
-        password: inputs.password,
-      },
+    firebase
+    .auth()
+    .signInWithEmailAndPassword(inputs.email, inputs.password)
+    .then((userCredential) => {
+      // Dispatch the action to update the auth state
+      dispatch(signIn(userCredential.user.uid));
+      navigation.navigate('Home');
     })
-      .then(res => {
-        //console.log(res.headers['x-access-token']);
-        AsyncStorage.setItem('token', res.headers['x-access-token'])
-          .then(() => {
-            onLogin();
-            // If isLoading is true, we render the SplashScreen component.
-            if (isLoading) {
-              <SplashScreen />;
-              navigation.navigate('Home');
-            }
-          })
-          .catch(err => {
-            //rajouter ici notifee
-            //console.log('🚀 ~ file: login.js:6 ~ Login ~ err', err);
-          });
-      })
-      .catch(err => {
-        setError(err.message);
-        //rajouter ici notifee
-        //console.log('🚀 ~ file: login.js:6 ~ Login ~ err', err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+    .catch((error) => {
+      setError(error.message);
+    });
+};
   
   return (
     <BackgroundImage source={require('../../../public/LogoF-vert.png')}>
