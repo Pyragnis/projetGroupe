@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import { firebase } from '../../config/FirebaseConfig';
+import { Alert } from 'react-native';
 
 const BookListContainer = styled.View`
   flex: 1;
@@ -41,6 +42,12 @@ const ButtonText = styled.Text`
 
 const AddToCategoryButton = styled.TouchableOpacity`
   background-color: #4CAF50;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+`;
+const Supp = styled.TouchableOpacity`
+  background-color: red;
   padding: 10px;
   border-radius: 5px;
   margin-top: 10px;
@@ -151,6 +158,31 @@ const BookList = ({ navigation }) => {
       console.log(error);
     }
   };
+  const deletelivre = (bookid) => {
+    Alert.alert(
+      'Confirmation',
+      'Êtes-vous sûr de vouloir supprimer ce livre ? il ne sera plus present dans votre blibliothèque ni dans vos catégorie',
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Supprimer',
+          onPress: () => {
+            firebase.firestore().collection('livres').doc(bookid).delete()
+              .then(() => {
+                console.log('livres deleted successfully');
+              })
+              .catch((error) => {
+                console.log('Error deleting livres :', error);
+              });
+          },
+        },
+      ],
+      { cancelable: true },
+    );
+  };
   
 
   const renderBook = ({ item }) => (
@@ -165,6 +197,9 @@ const BookList = ({ navigation }) => {
       <AddToCategoryButton onPress={() => handleAddToCategoryPress(item.id)}>
         <AddToCategoryButtonText>Ajouter à une catégorie</AddToCategoryButtonText>
       </AddToCategoryButton>
+      <Supp onPress={() => deletelivre(item.id)}>
+        <AddToCategoryButtonText>supprimer livre</AddToCategoryButtonText>
+      </Supp>
     </BookCard>
   );
 
