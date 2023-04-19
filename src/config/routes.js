@@ -10,6 +10,7 @@ import BookList from '../screens/BookList';
 import CategorieFire from '../screens/CategorieFire';
 import Testbd from '../screens/testbd';
 import CategoryList from '../screens/CategorieList';
+import DetailCategorie from '../screens/DetailCategorie';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,11 @@ const Router= () => {
             <Stack.Screen name="Booklist">
               {props => (
                 <BookList {...props} onLogout={() => setIsLoggedIn(false)} />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="DetailCategorie">
+              {props => (
+                <DetailCategorie {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
             <Stack.Screen name="Blibliotheque">

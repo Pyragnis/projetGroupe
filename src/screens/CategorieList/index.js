@@ -4,9 +4,11 @@ import { firebase } from '../../config/FirebaseConfig';
 import { View, Text, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
-const CategoryContainer = styled.View`
+
+const CategoryContainer = styled.TouchableOpacity`
   background-color: ${({ bgColor }) => bgColor};
   padding: 10px;
   margin: 10px;
@@ -48,9 +50,10 @@ const BackButtonText = styled.Text`
   text-align: center;
 `;
 
-const CategoryList = ({ navigation }) => {
+const CategoryList = () => {
   const dispatch = useDispatch();
   const [categories, setCategories] = React.useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const unsubscribe = firebase.firestore()
@@ -62,18 +65,30 @@ const CategoryList = ({ navigation }) => {
     return () => unsubscribe();
   }, []);
 
+  const handlePress = (id) => {
+    navigation.navigate('DetailCategorie', { categoryId: id })
+    
+    
+  }
+
   const renderCategory = ({ item }) => (
-    <CategoryContainer bgColor={item.bgColor}>
-      <CategoryName>{item.name}</CategoryName>
-      <DeleteButton onPress={() => deleteCategory(item.id)}>
-        <DeleteButtonText>Supprimer</DeleteButtonText>
-      </DeleteButton>
-    </CategoryContainer>
+    
+    
+      <CategoryContainer bgColor={item.bgColor} onPress={() => handlePress(item.id)}>
+        <CategoryName>{item.name}</CategoryName>
+        <DeleteButton onPress={() => deleteCategory(item.id)}>
+          <DeleteButtonText>Supprimer</DeleteButtonText>
+        </DeleteButton>
+      </CategoryContainer>
+    
   );
+  
 
   const handleBackPress = () => {
     navigation.goBack();
+    
   }
+  
 
   const deleteCategory = (categoryId) => {
     Alert.alert(
