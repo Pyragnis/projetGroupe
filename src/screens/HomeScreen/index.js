@@ -1,29 +1,41 @@
 import React from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, Animated } from 'react-native';
 import styled from 'styled-components/native';
+import * as Animatable from 'react-native-animatable';
 
 const Index = ({ navigation }) => {
+  const zoomInAnimation = {
+    0: { scale: 1 },
+    1: { scale: 1.2 }
+  };
+
   return (
     <Container>
       <Logo source={require('../../../public/asset/logo.png')}/>
-      
       <ButtonsContainer>
-      
-        <Button onPress={() => navigation.navigate('Scanner')}>
-          <ButtonText>Scanner</ButtonText>
-        </Button>
-        <Button onPress={() => navigation.navigate('Blibliotheque')}>
-          <ButtonText> add categorie</ButtonText>
-        </Button>
-        <Button onPress={() => navigation.navigate('CategorieList')}>
-          <ButtonText> list Categorie </ButtonText>
-        </Button>
-        <Button onPress={() => navigation.navigate('Booklist')}>
-          <ButtonText> liste livres </ButtonText>
-        </Button>
+        <Animatable.View animation={zoomInAnimation}>
+          <Button onPress={() => navigation.navigate('Scanner')}>
+            <ButtonText>Scanner</ButtonText>
+          </Button>
+        </Animatable.View>
+        <Animatable.View animation={zoomInAnimation}>
+          <Button onPress={() => navigation.navigate('Blibliotheque')}>
+            <ButtonText>add categorie</ButtonText>
+          </Button>
+        </Animatable.View>
+        <Animatable.View animation={zoomInAnimation}>
+          <Button onPress={() => navigation.navigate('CategorieList')}>
+            <ButtonText>list Categorie</ButtonText>
+          </Button>
+        </Animatable.View>
+        <Animatable.View animation={zoomInAnimation}>
+          <Button onPress={() => navigation.navigate('Booklist')}>
+            <ButtonText>liste livres</ButtonText>
+          </Button>
+        </Animatable.View>
       </ButtonsContainer>
     </Container>
-  ); 
+  );
 };
 
 // création des Styled Components
@@ -37,12 +49,12 @@ const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+  background-color: #3CB371; /* green color */
 `;
 
 const Logo = styled.Image`
   width: 500px;
   height: 200px;
-  
 `;
 
 const ButtonsContainer = styled.View`
@@ -54,7 +66,7 @@ const ButtonsContainer = styled.View`
 `;
 
 const Button = styled.TouchableOpacity`
-  background-color: green;
+  background-color: #008000; /* green color */
   padding: 10px 25px;
   border-radius: 25px;
   margin: 14px;
@@ -65,6 +77,5 @@ const ButtonText = styled.Text`
   color: white;
   text-align: center;
 `;
-
 
 export default Index;
