@@ -3,6 +3,7 @@ import { View, Text, Image } from 'react-native';
 import { firebase } from '../../config/FirebaseConfig';
 import { useRoute } from '@react-navigation/native';
 import styled from 'styled-components/native';
+import { Alert } from 'react-native';
 
 const Container = styled.View`
   padding: 20px;
@@ -117,18 +118,40 @@ const DetailCategorie = ({ navigation }) => {
   }, [route.params.categoryId]);
 
   const handleRemoveBook = (bookId) => {
-    
-    
-    const categoryId = route.params.categoryId;
-    const categoryRef = firebase.firestore().collection('categories').doc(categoryId);
-    categoryRef.update({
-      books: firebase.firestore.FieldValue.arrayRemove(bookId)
-    }).then(() => {
-      setBooks(currentBooks => currentBooks.filter(book => book.id !== bookId));
-    }).catch(error => {
-      console.log(error);
-    });
-};
+    Alert.alert(
+      'Confirmation',
+      'Êtes-vous sûr de vouloir supprimer ce livre ? Il sera supprimer de la catégorie mais pas de votre blibliothèque',
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Supprimer',
+          onPress: () => {
+            const categoryId = route.params.categoryId;
+            const categoryRef = firebase.firestore().collection('categories').doc(categoryId);
+            categoryRef.update({
+              books: firebase.firestore.FieldValue.arrayRemove(bookId)
+            }).then(() => {
+              setBooks(currentBooks => currentBooks.filter(book => book.id !== bookId));
+              firebase.firestore().collection('livres').doc(bookId).delete()
+                .then(() => {
+                  console.log('livres deleted successfully');
+                })
+                .catch((error) => {
+                  console.log('Error deleting livres :', error);
+                });
+            }).catch(error => {
+              console.log(error);
+            });
+          },
+        },
+      ],
+      { cancelable: true },
+    );
+  };
+  
 
 
   return (
