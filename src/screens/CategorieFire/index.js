@@ -3,11 +3,13 @@ import styled from 'styled-components/native';
 import CategoryForm from '../../components/CategoryForm';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import BackgroundImage from '../../components/PersonnalBackground';
 
 const CategorieFire = () => {
   const navigation = useNavigation();
 
   return (
+    <BackgroundImage source={require('../../../public/LogoF-vert.png')}>
     <Container>
       <Title>Categories</Title>
       <CategoryForm/>
@@ -15,6 +17,7 @@ const CategorieFire = () => {
         <ButtonText>Back</ButtonText>
       </BackButton>
     </Container>
+    </BackgroundImage>
   );
 };
 
@@ -27,6 +30,8 @@ const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
+  color:white;
+  text-align:center;
 `;
 
 const BackButton = styled.TouchableOpacity`

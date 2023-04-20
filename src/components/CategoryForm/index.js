@@ -16,6 +16,21 @@ const ButtonText = styled.Text`
   font-weight: bold;
   text-align: center;
 `;
+const TextI = styled.Text`
+  color: white;
+  font-weight: bold;
+  
+`;
+const StyledTextInput = styled.TextInput`
+  height: 40px;
+  border-color: gray;
+  border-width: 1px;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+  color:white;
+`;
+
 
 const CategoryForm = () => {
   const dispatch = useDispatch();
@@ -29,9 +44,8 @@ const CategoryForm = () => {
 
   return (
     <View>
-      <Text>Category name:</Text>
-      <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+      <TextI>Category name:</TextI>
+      <StyledTextInput
         onChangeText={(text) => setCategoryName(text)}
         value={categoryName}
       />

@@ -8,9 +8,10 @@ import ScannerISBN from '../components/ScannerISNB';
 import CategoriesPage from '../screens/CategoriesPage';
 import BookList from '../screens/BookList';
 import CategorieFire from '../screens/CategorieFire';
-import Testbd from '../screens/testbd';
 import CategoryList from '../screens/CategorieList';
 import DetailCategorie from '../screens/DetailCategorie';
+import Settings from '../screens/SettingsScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -65,7 +66,7 @@ const Router= () => {
                 <CategorieFire {...props} onLogout={() => setIsLoggedIn(false)} />
               )}
             </Stack.Screen>
-            {/* Ajoutez cette ligne */}
+            <Stack.Screen name="Settings" component={Settings} />
           </Stack.Navigator>
         ) : (
           <Stack.Navigator

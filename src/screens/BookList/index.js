@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, Image, Modal } from 'react-nati
 import styled from 'styled-components/native';
 import { firebase } from '../../config/FirebaseConfig';
 import { Alert } from 'react-native';
+import BackgroundImage from '../../components/PersonnalBackground';
 
 const BookListContainer = styled.View`
   flex: 1;
@@ -29,15 +30,30 @@ const ISBN = styled.Text`
 `;
 
 const BackButton = styled.TouchableOpacity`
-  background-color: #ccc;
+  background-color: #808080;
   padding: 10px;
   border-radius: 5px;
   margin: 10px;
 `;
 
+const Title = styled.Text`
+font-size: 18px;
+font-weight: bold;
+color:white
+text-align:center;
+`;
+const InputTitle = styled.Text`
+font-size: 18px;
+font-weight: bold;
+color:white
+padding:20px;
+`;
+
 const ButtonText = styled.Text`
   font-size: 18px;
   font-weight: bold;
+  color:white
+  text-align:center;
 `;
 
 const AddToCategoryButton = styled.TouchableOpacity`
@@ -111,14 +127,17 @@ const ModalCloseIconText = styled.Text`
   font-size: 20px;
   color: #008000;
 `;
+const SearchInput = styled.TextInput` border: 1px solid #ccc; padding: 10px; border-radius: 5px; margin-bottom: 10px; margin-bottom:20px; margin-left:20px; margin-right:20px; `;
 
 
 
 const BookList = ({ navigation }) => {
   const [books, setBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedBookId, setSelectedBookId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
 
   useEffect(() => {
@@ -137,6 +156,11 @@ const BookList = ({ navigation }) => {
       unsubscribeCategories();
     };
   }, []);
+
+  useEffect(() => {
+    const filteredBooks = books.filter((book) => book.title.includes(searchQuery));
+    setFilteredBooks(filteredBooks);
+    }, [books, searchQuery]);
 
   
 
@@ -204,14 +228,22 @@ const BookList = ({ navigation }) => {
   );
 
   return (
+    <BackgroundImage source={require('../../../public/LogoF-vert.png')}>
     <View style={{ flex: 1 }}>
+    <Title>Blibliothèque</Title>  
+    <InputTitle>rechercher un livre:</InputTitle> 
+    <SearchInput
+    placeholder="Search for a book"
+    value={searchQuery}
+    onChangeText={(text) => setSearchQuery(text)}
+  />
       <FlatList
-        data={books}
+        data={filteredBooks}
         renderItem={renderBook}
         keyExtractor={(item) => item.id}
       />
       <BackButton onPress={() => navigation.goBack()}>
-        <ButtonText>Back</ButtonText>
+        <ButtonText>Retour</ButtonText>
       </BackButton>
 
       <Modal
@@ -245,6 +277,7 @@ const BookList = ({ navigation }) => {
   </ModalContent>
 </Modal>
     </View>
+    </BackgroundImage>
   );
 };
 export default BookList;

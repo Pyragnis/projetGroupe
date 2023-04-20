@@ -27,7 +27,7 @@ const styles = {
 
 const Overlay = styled.View`
   flex: 1;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.2);
 `;
 
 export default BackgroundImage;
