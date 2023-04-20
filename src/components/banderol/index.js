@@ -1,20 +1,20 @@
 import React from "react";
-import styled from "styled-components/native";
 import { Image } from "react-native";
+import styled from "styled-components/native";
 
-//Renvoie une image dans l ecran de login
-const Bandeau = () => {
+//Renvoie une image
+const Bandeau = ({source}) => {
   return (
     <ImageStyled
-      source={require('../../../public/livres.jpg')}
+      source={source}
     />
   );
 };
 
 const ImageStyled = styled(Image)`
   resizeMode: stretch;
-  width: 60%;
-  height: 30%;
+  width: 100%;
+  height: 12%;
   bottom: 10px;
 `;
 

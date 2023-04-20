@@ -13,13 +13,13 @@ const Index = ({ navigation }) => {
           <ButtonText>Scanner</ButtonText>
         </Button>
         <Button onPress={() => navigation.navigate('Blibliotheque')}>
-          <ButtonText> add categorie</ButtonText>
+          <ButtonText> ajouter une catégorie</ButtonText>
         </Button>
         <Button onPress={() => navigation.navigate('CategorieList')}>
-          <ButtonText> list Categorie </ButtonText>
+          <ButtonText> voir les Categories </ButtonText>
         </Button>
         <Button onPress={() => navigation.navigate('Booklist')}>
-          <ButtonText> liste livres </ButtonText>
+          <ButtonText> voir les livres </ButtonText>
         </Button>
       </ButtonsContainer>
     </Container>

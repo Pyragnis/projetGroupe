@@ -1,14 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-//import axios from '../../config/axiosConfig';
-import axios from 'axios';
 import React, {useState} from 'react';
-import Spinner from 'react-native-loading-spinner-overlay';
-import styled from 'styled-components';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axiosInstance from '../../config/axiosInstance';
+import SplashScreen from '../../components/SplashScreen';
 import Bandeau from '../../components/banderol';
+import BackgroundImage from '../../components/PersonnalBackground';
+import styled from 'styled-components';
+import { signIn } from '../../actions/firebaseAuth';
 
 const Login = ({onLogin}) => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
   const [inputs, setInputs] = React.useState({
@@ -16,10 +17,16 @@ const Login = ({onLogin}) => {
     password: '',
   });
 
+    // This useEffect hook is used to simulate the time it takes to authenticate the user.
+    React.useEffect(() => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    }, []);
+
   const handleLogin = () => {
-    setLoading(true);
     setError(null);
-    axios({
+    axiosInstance({
       method: 'POST',
       url: 'https://login.hikkary.com/users/login',
       data: {
@@ -27,30 +34,37 @@ const Login = ({onLogin}) => {
         password: inputs.password,
       },
     })
-      .then(res => {
-        //console.log(res.headers['x-access-token']);
-        AsyncStorage.setItem('token', res.headers['x-access-token'])
-          .then(() => {
-            onLogin(); // Ajoutez cette ligne pour appeler la fonction onLogin
-
+    .then(res => {
+      //console.log(res.headers['x-access-token']);
+      AsyncStorage.setItem('token', res.headers['x-access-token'])
+        .then(() => {
+          onLogin();
+          // If isLoading is true, we render the SplashScreen component.
+          if (isLoading) {
+            <SplashScreen />;
             navigation.navigate('Home');
-          })
-          .catch(err => {
-            //console.log('🚀 ~ file: login.js:6 ~ Login ~ err', err);
-          });
-      })
-      .catch(err => {
-        setError(err.message);
-        //console.log('🚀 ~ file: login.js:6 ~ Login ~ err', err);
-      });
-      setLoading(false);
-  };
-
+          }
+        })
+        .catch(err => {
+          //rajouter ici notifee
+          //console.log('🚀 ~ file: login.js:6 ~ Login ~ err', err);
+        });
+    })
+    .catch(err => {
+      setError(err.message);
+      //rajouter ici notifee
+      //console.log('🚀 ~ file: login.js:6 ~ Login ~ err', err);
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+};
+  
   return (
-    <Container>
+    <BackgroundImage source={require('../../../public/LogoF-vert.png')}>
+      <Container>
       <Title>Connexion</Title>
-      <Spinner visible={loading} />
-      <Bandeau/>
+        <Bandeau source={require('../../../public/LogoN-vert.png')} />
         <TextInputStyled
           placeholder="Email"
           value={inputs.email}
@@ -59,14 +73,16 @@ const Login = ({onLogin}) => {
         <TextInputStyled
           placeholder="Password"
           value={inputs.password}
+          secureTextEntry={true}
           onChangeText={text => setInputs({...inputs, password: text})}
         />
-      <Touchable onPress={handleLogin}>
-        <StyledText>Se connecter</StyledText>
-      </Touchable>
-      {/*{error && <ErrorText>{error}</ErrorText>}  afficher le message d'erreur s'il existe */}
-    </Container>
-  );
+        <Touchable onPress={handleLogin}>
+          <StyledText>Se connecter</StyledText>
+        </Touchable>
+        {/*{error && <ErrorText>{error}</ErrorText>} afficher le message d'erreur s'il existe */}
+      </Container>
+    </BackgroundImage>
+    );
 };
 
 const Title = styled.Text`
@@ -77,6 +93,7 @@ const Title = styled.Text`
 const TextInputStyled = styled.TextInput`
   width: 100%;
   padding: 10px;
+  background-color: white;
   margin-bottom: 10px;
   border-width: 1px;
   border-color: #ccc;
@@ -93,7 +110,7 @@ const Touchable = styled.TouchableOpacity`
 `;
 
 const StyledText = styled.Text`
-  color: #fff;
+  color: black;
   font-size: 18px;
 `;
 
@@ -101,7 +118,6 @@ const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
   padding: 20px;
 `;
 
