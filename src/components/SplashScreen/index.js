@@ -12,7 +12,7 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={require('../../../public/Loading.png')} />
+      <Image style={styles.image} source={require('../../../public/Loading.gif')} />
     </View>
   );
 };
