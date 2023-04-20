@@ -1,17 +1,33 @@
-import { Button, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { fetchData } from '../actions/SplashScreenLoader';
 
-const ReduxCounter = () => {
-  const {value} = useSelector(state => state.counter);
+const index = () => {
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchData());
+  }, []);
+
   return (
-    <View>
-      <Text>ReduxCounter</Text>
-      <Text>{value}</Text>
-      <Button title="Increment" onPress={() => dispatch(incrementCounter())} />
+    <View style={styles.container}>
+      <Image style={styles.image} source={require('../assets/loading.gif')} />
     </View>
   );
 };
 
-export default ReduxCounter;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+  },
+  image: {
+    width: 150,
+    height: 150,
+  },
+});
+
+export default index;

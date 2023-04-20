@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import "../../config/translation";
+
+import 'intl';
+import 'intl/locale-data/jsonp/en'; // ou la langue de votre choix
+
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -65,6 +69,7 @@ const Settings = ({ route }) => {
             <RadioButtonLabel theme={theme}>{t('english')}</RadioButtonLabel>
           </RadioButton>
         </RadioButtonsContainer>
+
       </Section>
     </Container>
   );

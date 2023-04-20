@@ -2,24 +2,86 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
+import { firebase } from '../../config/FirebaseConfig';
+import { Alert } from 'react-native';
 
-const ScannerISBN = () => {
+
+
+const ScannerISBN = ({ navigation }) => {
   const [scanned, setScanned] = useState(false);
-  const [bookData, setBookData] = useState({});
+  const [cameraClicks, setCameraClicks] = useState(0);
 
-  const handleBarCodeScanned = async ({ type, data }) => {
+  const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
-
+  
     try {
+      // Vérifie si le livre existe déjà dans la base de données
+      const bookRef = await firebase.firestore().collection('livres').where('isbn', '==', data).get();
+      if (!bookRef.empty) {
+        // Le livre existe déjà dans la base de données
+        Alert.alert('Livre déjà existant', 'Ce livre existe déjà dans votre collection',[{ text: 'OK', onPress: () => navigation.goBack() }]);
+        return;
+      }
+  
       const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${data}`);
       const book = response.data.items[0].volumeInfo;
-      setBookData({
-        title: book.title,
-        description: book.description,
-        image: book.imageLinks.thumbnail,
-      });
+  
+      // Vérifie si les données sont vides, sinon met 'null'
+      const title = book.title || null;
+      const description = book.description || null;
+      const image = book.imageLinks ? book.imageLinks.thumbnail : null;
+      const isbn = data;
+  
+      // Afficher une boîte de dialogue de confirmation avant d'ajouter le livre à la base de données
+      Alert.alert(
+        'Confirmation',
+        `Voulez-vous ajouter le livre "${title}" à votre collection ?`,
+        [
+          {
+            text: 'Annuler',
+            style: 'cancel'
+          },
+          {
+            text: 'Ajouter',
+            onPress: async () => {
+              // Ajout du livre scanné à Firestore
+              await firebase.firestore().collection('livres').add({
+                title,
+                description,
+                image,
+                isbn,
+              });
+              // Afficher un pop-up pour informer l'utilisateur que le livre a été ajouté
+              Alert.alert(
+                'Livre ajouté',
+                'Le livre a été ajouté à votre collection',
+                [{ text: 'OK', onPress: () => navigation.navigate('Booklist') }]
+              );
+            }
+          }
+        ]
+      );
+  
     } catch (error) {
       console.error(error);
+      Alert.alert(
+        'Livre introuvable',
+        'Le livre correspondant au code barre scanné n\'a pas été trouvé.',
+        [{ text: 'OK', onPress: () => navigation.goBack() }]
+      );
+    }
+  };
+
+  
+
+  const handlePress = () => {
+    navigation.goBack(); // retourne à la page précédente
+  };
+
+  const handleCameraClick = () => {
+    setCameraClicks(cameraClicks + 1);
+    if (cameraClicks === 1) {
+      handlePress();
     }
   };
 
@@ -28,14 +90,8 @@ const ScannerISBN = () => {
       <Camera
         type={RNCamera.Constants.Type.back}
         onBarCodeRead={scanned ? undefined : handleBarCodeScanned}
+        onTouchEnd={handleCameraClick}
       />
-      {scanned && (
-        <BookInfo>
-          <BookImage source={{ uri: bookData.image }} />
-          <BookTitle>{bookData.title}</BookTitle>
-          <BookDescription>{bookData.description}</BookDescription>
-        </BookInfo>
-      )}
     </Container>
   );
 };
@@ -46,31 +102,6 @@ const Container = styled.View`
 
 const Camera = styled(RNCamera)`
   flex: 1;
-`;
-
-const BookInfo = styled.View`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: white;
-  padding: 16px;
-`;
-
-const BookImage = styled.Image`
-  width: 100px;
-  height: 150px;
-  margin-right: 16px;
-`;
-
-const BookTitle = styled.Text`
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 8px;
-`;
-
-const BookDescription = styled.Text`
-  font-size: 16px;
 `;
 
 export default ScannerISBN;

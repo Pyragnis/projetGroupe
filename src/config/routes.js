@@ -5,6 +5,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import Settings from '../screens/SettingsScreen';
+import ScannerISBN from '../components/ScannerISNB';
+import BookList from '../screens/BookList';
+import CategorieFire from '../screens/CategorieFire';
+import CategoryList from '../screens/CategorieList';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,17 +29,37 @@ const Router= () => {
     }, []);
 
     return( 
-        <NavigationContainer>
-        {isLoggedIn ? (
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}>
-            <Stack.Screen name="Home">
-              {props => (
-                <HomeScreen {...props} onLogout={() => setIsLoggedIn(false)} />
-              )}
-            </Stack.Screen>
+      <NavigationContainer>
+      {isLoggedIn ? (
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="Home">
+            {props => (
+              <HomeScreen {...props} onLogout={() => setIsLoggedIn(false)} />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Scanner">
+            {props => (
+              <ScannerISBN {...props} onLogout={() => setIsLoggedIn(false)} />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="CategorieList">
+            {props => (
+              <CategoryList {...props} onLogout={() => setIsLoggedIn(false)} />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Booklist">
+            {props => (
+              <BookList {...props} onLogout={() => setIsLoggedIn(false)} />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Blibliotheque">
+            {props => (
+              <CategorieFire {...props} onLogout={() => setIsLoggedIn(false)} />
+            )}
+          </Stack.Screen>
             <Stack.Screen name="Settings" component={Settings} />
           </Stack.Navigator>
         ) : (

@@ -1,4 +1,4 @@
-export const loginUser = (email, password) => async (dispatch) => {
+/*export const loginUser = (email, password) => async (dispatch) => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       dispatch({ type: 'LOGIN_USER_SUCCESS' });
@@ -15,4 +15,4 @@ export const loginUser = (email, password) => async (dispatch) => {
       console.log(err);
     }
   };
-  
+  */
