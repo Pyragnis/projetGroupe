@@ -13,7 +13,7 @@ const Login = ({onLogin}) => {
   const [error, setError] = useState(null);
   const navigation = useNavigation();
   const [inputs, setInputs] = React.useState({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -30,7 +30,7 @@ const Login = ({onLogin}) => {
       method: 'POST',
       url: 'https://login.hikkary.com/users/login',
       data: {
-        username: inputs.email,
+        username: inputs.username,
         password: inputs.password,
       },
     })
@@ -68,7 +68,7 @@ const Login = ({onLogin}) => {
         <TextInputStyled
           placeholder="Email"
           value={inputs.email}
-          onChangeText={text => setInputs({...inputs, email: text})}
+          onChangeText={text => setInputs({...inputs, username: text})}
         />
         <TextInputStyled
           placeholder="Password"
