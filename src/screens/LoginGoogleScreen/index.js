@@ -1,7 +1,28 @@
 import { GoogleSignin, GoogleSigninButton } from "@react-native-google-signin/google-signin";
-import { View, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import auth from '@react-native-firebase/app';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components/native';
+import Bandeau from '../../components/banderol';
+import BackgroundImage from '../../components/PersonnalBackground';
+
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Title = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
+const Button = styled(GoogleSigninButton)`
+  width: 300px;
+  height: 65px;
+  margin-top: 300px;
+`;
 
 export default function LoginGoogle({ navigation }) {
   const [initializing, setInitializing] = useState(true);
@@ -50,31 +71,14 @@ export default function LoginGoogle({ navigation }) {
 
   if (!user) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Google Authentification</Text>
-        <GoogleSigninButton
-          style={styles.button}
-          onPress={onGoogleButtonPress}
-        />
-      </View>
+      <BackgroundImage source={require('../../../public/LogoF-vert.png')}>
+        <Container>
+          <Title>Google Authentification</Title>
+          <Bandeau source={require('../../../public/LogoN-vert.png')} />
+          <Button onPress={onGoogleButtonPress} />
+        </Container>
+      </BackgroundImage>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  button: {
-    width: 300,
-    height: 65,
-    marginTop: 300,
-  },
-});
