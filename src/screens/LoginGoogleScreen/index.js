@@ -1,52 +1,80 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { useDispatch } from 'react-redux';
-//import { signInWithGoogle } from '../../actions/firebaseAuth';
-import { auth, provider } from '../../config/FirebaseConfig';
-import GoogleButton from 'react-google-button';
-import { signInWithRedirect } from 'firebase/auth';
+import { GoogleSignin, GoogleSigninButton } from "@react-native-google-signin/google-signin";
+import { View, StyleSheet } from "react-native";
+import auth from '@react-native-firebase/app';
+import React, { useEffect, useState } from 'react';
 
-const LoginScreen = () => {
-  function signUp(){
-    signInWithRedirect(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
+export default function LoginGoogle({ navigation }) {
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
 
-        // name = user.displayName
-        // email = user.email
+  GoogleSignin.configure({
+    webClientId: '323250229849-kqi2p5t2k1rfehd8g0661coilho9tpoj.apps.googleusercontent.com'
+  });
 
-        Alert(user.displayName);
-      }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+
+    if (user) {
+      // User is signed in, redirect to home page
+      navigation.navigate('Home');
+    }
   }
 
-  function signOut() {
-    const auth = getAuth();
-    signOut(auth).then(() => {
-      // Sign-out successful.
-    }).catch((error) => {
-      // An error happened.
-    });
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  const onGoogleButtonPress = async () => {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    // Get the users ID token
+    const { idToken } = await GoogleSignin.signIn();
+
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    // Sign-in the user with the credential
+    const user_sign_in = auth().signInWithCredential(googleCredential);
+    user_sign_in.then((user) => {
+      console.log(user);
+    })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
-  return (
-    <View>
-      <Text>Connectez-vous avec Google</Text>
-      <GoogleButton onClick={signUp} />
-    </View>
-  );
-};
+  if (initializing) return null;
 
-export default LoginScreen;
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Google Authentification</Text>
+        <GoogleSigninButton
+          style={styles.button}
+          onPress={onGoogleButtonPress}
+        />
+      </View>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  button: {
+    width: 300,
+    height: 65,
+    marginTop: 300,
+  },
+});

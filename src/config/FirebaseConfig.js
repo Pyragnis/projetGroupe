@@ -1,5 +1,6 @@
-import {initializeApp} from 'firebase/app';
-import {GoogleAuthProvider, getAuth} from 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore'
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -13,7 +14,8 @@ const firebaseConfig = {
   measurementId: "G-434TV4WE69"
 };
 
-const app = initializeApp(firebaseConfig);
+if(!firebase.apps.length){
+  firebase.initializeApp(firebaseConfig);
+}
 
-export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider;
+export {firebase};

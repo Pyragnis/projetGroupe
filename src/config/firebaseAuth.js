@@ -1,28 +1,19 @@
-/*import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { LOGIN_SUCCESS, LOGIN_FAILURE } from './types';
+import {initializeApp} from 'firebase/app';
+import {GoogleAuthProvider, getAuth} from 'firebase/auth';
 
-GoogleSignin.configure({
-  webClientId: 'VOTRE_CLIENT_ID',
-});
-
-export const signInWithGoogle = () => async (dispatch) => {
-  try {
-    const { idToken } = await GoogleSignin.signIn();
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    const userCredential = await auth().signInWithCredential(googleCredential);
-    dispatch({ type: LOGIN_SUCCESS, payload: userCredential });
-  } catch (error) {
-    dispatch({ type: LOGIN_FAILURE, payload: error.message });
-  }
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBteOt88YgouQPpYiusule9feTPx7K5x58",
+  authDomain: "readify-382212.firebaseapp.com",
+  projectId: "readify-382212",
+  storageBucket: "readify-382212.appspot.com",
+  messagingSenderId: "323250229849",
+  appId: "1:323250229849:web:99f8257679fe7ee8665748",
+  measurementId: "G-434TV4WE69"
 };
 
-export const signOutWithGoogle = () => async (dispatch) => {
-  try {
-    await auth().signOut();
-    await GoogleSignin.signOut();
-  } catch (error) {
-    console.error(error);
-  }
-};
-*/
+const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider;
