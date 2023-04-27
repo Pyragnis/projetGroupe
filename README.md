@@ -4,7 +4,7 @@ participants:
 Sabbatorsi Enzo
 Cheong David
 
-Regarde la video nommer demo.MP4 à la racine du projet pour voir la demo du code si tu as un soucis avec le buildss.
+Regarde la video demo du projet : https://youtu.be/aE1DG0ixv_U
 
 Rendu:
 - un Git avec un README, qui decrit les fonctionnalités du projets
